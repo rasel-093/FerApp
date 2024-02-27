@@ -1,8 +1,11 @@
 package com.vicksam.ferapp
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Size
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.otaliastudios.cameraview.controls.Audio
@@ -25,6 +28,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //val profileBtn = findViewById<Button>(R.id.profileButtonId)
+        profileButtonId.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        })
 
         val lensFacing =
                 savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK

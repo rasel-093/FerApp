@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Fer App</string>
     <string name="toggle_camera">Toggle camera</string>
+    <string name="go_to_profile">Go to Profile</string>
 </resources>
