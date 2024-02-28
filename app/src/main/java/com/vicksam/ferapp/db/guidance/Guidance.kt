@@ -1,4 +1,4 @@
-package com.vicksam.ferapp.db
+package com.vicksam.ferapp.db.guidance
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

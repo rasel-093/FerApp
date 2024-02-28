@@ -1,5 +1,6 @@
-package com.vicksam.ferapp.db
+package com.vicksam.ferapp.db.user
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -22,5 +23,5 @@ interface UserDao {
     suspend fun getUserById(userId: Int): User?
 
     @Query("SELECT * FROM user")
-    suspend fun getAllUsers(): List<User>
+    fun getAllUsers(): LiveData<List<User>>
 }

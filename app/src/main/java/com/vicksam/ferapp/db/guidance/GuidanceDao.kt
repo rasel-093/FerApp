@@ -1,5 +1,6 @@
-package com.vicksam.ferapp.db
+package com.vicksam.ferapp.db.guidance
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -22,5 +23,5 @@ interface GuidanceDao {
     suspend fun getGuidanceById(guidanceId: Int): Guidance?
 
     @Query("SELECT * FROM guidance")
-    suspend fun getAllGuidance(): List<Guidance>
+    fun getAllGuidance(): LiveData<List<Guidance>>
 }

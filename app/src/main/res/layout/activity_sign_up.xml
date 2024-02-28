@@ -15,7 +15,7 @@
 <!--        android:layout_marginBottom="32dp" />-->
 
     <EditText
-        android:id="@+id/name_field"
+        android:id="@+id/name_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -26,12 +26,22 @@
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/email_field"
+        android:id="@+id/username_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="Username"
         android:padding="10dp"
         android:inputType="textEmailAddress"
+        android:imeOptions="actionNext"
+        android:background="@drawable/rounded_edit_text_background"
+        android:layout_marginBottom="16dp" />
+    <EditText
+        android:id="@+id/age_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Age"
+        android:padding="10dp"
+        android:inputType="numberDecimal"
         android:imeOptions="actionNext"
         android:background="@drawable/rounded_edit_text_background"
         android:layout_marginBottom="16dp" />

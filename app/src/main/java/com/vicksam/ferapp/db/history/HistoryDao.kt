@@ -1,5 +1,6 @@
-package com.vicksam.ferapp.db
+package com.vicksam.ferapp.db.history
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -22,8 +23,8 @@ interface HistoryDao {
     suspend fun getHistoryByUserId(userId: Int): List<History>
 
     @Query("SELECT * FROM history")
-    suspend fun getAllHistory(): List<History>
+    fun getAllHistory(): LiveData<List<History>>
 
     @Query("SELECT * FROM history WHERE guidanceId = :guidanceId")
-    suspend fun getHistoryByGuidanceId(guidanceId: Int): List<History>
+    suspend fun getHistoryByGuidanceId(guidanceId: Int): LiveData<List<History>>
 }
