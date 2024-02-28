@@ -26,4 +26,5 @@ class ProfileActivity : AppCompatActivity() {
         recyclerView.adapter = EmotionHistoryAdapter(emotionHistory)
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
+
 }
