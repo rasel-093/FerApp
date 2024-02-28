@@ -1,0 +1,26 @@
+package com.vicksam.ferapp.db
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+
+@Dao
+interface GuidanceDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGuidance(guidance: Guidance)
+
+    @Update
+    suspend fun updateGuidance(guidance: Guidance)
+
+    @Delete
+    suspend fun deleteGuidance(guidance: Guidance)
+
+    @Query("SELECT * FROM guidance WHERE guidanceId = :guidanceId")
+    suspend fun getGuidanceById(guidanceId: Int): Guidance?
+
+    @Query("SELECT * FROM guidance")
+    suspend fun getAllGuidance(): List<Guidance>
+}
