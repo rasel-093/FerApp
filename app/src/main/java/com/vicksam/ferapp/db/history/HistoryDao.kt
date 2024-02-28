@@ -26,5 +26,5 @@ interface HistoryDao {
     fun getAllHistory(): LiveData<List<History>>
 
     @Query("SELECT * FROM history WHERE guidanceId = :guidanceId")
-    suspend fun getHistoryByGuidanceId(guidanceId: Int): LiveData<List<History>>
+    fun getHistoryByGuidanceId(guidanceId: Int): LiveData<List<History>>
 }

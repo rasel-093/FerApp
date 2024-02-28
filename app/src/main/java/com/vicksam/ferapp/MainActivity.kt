@@ -8,6 +8,7 @@ import android.util.Log
 import android.util.Size
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
@@ -16,6 +17,12 @@ import com.otaliastudios.cameraview.controls.Audio
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Mode
 import com.otaliastudios.cameraview.size.SizeSelectors
+import com.vicksam.ferapp.db.history.History
+import com.vicksam.ferapp.db.history.HistoryViewModel
+import com.vicksam.ferapp.db.history.HistoryViewModelFactory
+import com.vicksam.ferapp.db.user.User
+import com.vicksam.ferapp.db.user.UserViewModel
+import com.vicksam.ferapp.db.user.UserViewModelFactory
 import com.vicksam.ferapp.fer.FerModel
 import com.vicksam.ferapp.fer.FerViewModel
 import husaynhakeem.io.facedetector.FaceBounds
@@ -34,6 +41,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val historyViewModel: HistoryViewModel = ViewModelProvider(this, HistoryViewModelFactory(application)).get(
+            HistoryViewModel::class.java)
 
         viewfinder = findViewById(R.id.viewfinder)
         faceBoundsOverlay = findViewById(R.id.faceBoundsOverlay)
@@ -57,7 +67,16 @@ class MainActivity : AppCompatActivity() {
                 override fun onPictureTaken(result: PictureResult) {
                     super.onPictureTaken(result)
                     val byteArrayImage = result.data
-
+                    // TODO: use dynamic date time. date time to string
+                    val history = History(
+                        dateTime = "2021", //todo : dynamic date
+                        userId = 2,
+                        expressionType = 3,
+                        capturedFace = byteArrayImage,
+                        emotion = "Sad",
+                        guidanceId = 3
+                    )
+                    historyViewModel.insertHistory(history = history)
                     Toast.makeText(this@MainActivity, "Snapshot Taken", Toast.LENGTH_SHORT).show()
                 }
             })

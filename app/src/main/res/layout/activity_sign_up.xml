@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:hint="Username"
         android:padding="10dp"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:imeOptions="actionNext"
         android:background="@drawable/rounded_edit_text_background"
         android:layout_marginBottom="16dp" />
@@ -45,6 +45,18 @@
         android:imeOptions="actionNext"
         android:background="@drawable/rounded_edit_text_background"
         android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/gender_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Gender"
+        android:padding="10dp"
+        android:inputType="text"
+        android:imeOptions="actionNext"
+        android:background="@drawable/rounded_edit_text_background"
+        android:layout_marginBottom="16dp"
+        android:autofillHints="Male|Female" />
 
     <EditText
         android:id="@+id/password_field"
@@ -67,7 +79,7 @@
         android:background="@drawable/rounded_edit_text_background"  />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/signup_buttonId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SignUp"
