@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
     <com.otaliastudios.cameraview.CameraView
         android:id="@+id/viewfinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:cameraMode="picture"
         android:keepScreenOn="true" />
 
     <husaynhakeem.io.facedetector.FaceBoundsOverlay
@@ -24,6 +26,14 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/toggle_camera"
         android:src="@drawable/ic_switch_camera" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/captureButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/go_to_profile"
+        android:src="@drawable/capture_icon" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/profileButtonId"
         android:layout_width="wrap_content"

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dp"
+    >
+
+<!--    <ImageView-->
+<!--        android:id="@+id/logo_image"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/profile_btn_icon"-->
+<!--        android:layout_marginBottom="32dp" />-->
+
+    <EditText
+        android:id="@+id/name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:padding="10dp"
+        android:inputType="text"
+        android:imeOptions="actionNext"
+        android:background="@drawable/rounded_edit_text_background"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/email_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:padding="10dp"
+        android:inputType="textEmailAddress"
+        android:imeOptions="actionNext"
+        android:background="@drawable/rounded_edit_text_background"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/password_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:padding="10dp"
+        android:inputType="textPassword"
+        android:imeOptions="actionNext"
+        android:background="@drawable/rounded_edit_text_background"
+        android:layout_marginBottom="16dp" />
+    <EditText
+        android:id="@+id/confirm_password_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:padding="10dp"
+        android:inputType="textPassword"
+        android:imeOptions="actionDone"
+        android:background="@drawable/rounded_edit_text_background"  />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SignUp"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

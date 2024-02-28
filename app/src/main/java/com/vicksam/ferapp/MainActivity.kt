@@ -2,14 +2,19 @@ package com.vicksam.ferapp
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.MediaActionSound
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
-import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
+import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.controls.Audio
 import com.otaliastudios.cameraview.controls.Facing
+import com.otaliastudios.cameraview.controls.Mode
 import com.otaliastudios.cameraview.size.SizeSelectors
 import com.vicksam.ferapp.fer.FerModel
 import com.vicksam.ferapp.fer.FerViewModel
@@ -32,19 +37,35 @@ class MainActivity : AppCompatActivity() {
 
         viewfinder = findViewById(R.id.viewfinder)
         faceBoundsOverlay = findViewById(R.id.faceBoundsOverlay)
-        var toggleCameraButton = findViewById<FloatingActionButton>(R.id.toggleCameraButton)
-        val profileButtonId = findViewById<FloatingActionButton>(R.id.profileButtonId)
 
-        profileButtonId.setOnClickListener {
+        val toggleCameraBtn = findViewById<FloatingActionButton>(R.id.toggleCameraButton)
+        val profileBtn = findViewById<FloatingActionButton>(R.id.profileButtonId)
+        val captureCameraBtn = findViewById<FloatingActionButton>(R.id.captureButtonId)
+
+        profileBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
 
+        captureCameraBtn.setOnClickListener {
+            viewfinder.mode = Mode.PICTURE;
+            viewfinder.takePictureSnapshot()
+            val mediaActionSound = MediaActionSound()
+            mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
+
+            viewfinder.addCameraListener(object : CameraListener(){
+                override fun onPictureTaken(result: PictureResult) {
+                    super.onPictureTaken(result)
+                    val byteArrayImage = result.data
+
+                    Toast.makeText(this@MainActivity, "Snapshot Taken", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
         val lensFacing = savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
-        setupCamera(lensFacing,toggleCameraButton)
-
+        setupCamera(lensFacing,toggleCameraBtn)
         FerModel.load(this)
-
         setupObservers()
     }
 
@@ -75,7 +96,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setupCamera(lensFacing: Facing, toggleCameraButton: FloatingActionButton) {
+    private fun setupCamera(
+        lensFacing: Facing,
+        toggleCameraButton: FloatingActionButton
+    ) {
         val faceDetector = FaceDetector(faceBoundsOverlay).also { it.setup() }
 
         viewfinder.facing = lensFacing
