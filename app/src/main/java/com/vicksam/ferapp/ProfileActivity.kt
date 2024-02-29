@@ -3,8 +3,15 @@ package com.vicksam.ferapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.vicksam.ferapp.db.history.HistoryViewModel
+import com.vicksam.ferapp.db.history.HistoryViewModelFactory
+import com.vicksam.ferapp.db.user.UserViewModel
+import com.vicksam.ferapp.db.user.UserViewModelFactory
 import com.vicksam.ferapp.emotionhistory.EmotionHistoryAdapter
 import com.vicksam.ferapp.emotionhistory.EmotionLogEntry
 
@@ -15,16 +22,17 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        val historyViewModel: HistoryViewModel =
+            ViewModelProvider(this, HistoryViewModelFactory(application)).get(HistoryViewModel::class.java)
 
-        // Initialize your emotionHistory list with data
-        emotionHistory = listOf(
-            EmotionLogEntry(1,"Happy", "Ok","2024-02-27 08:00:00"),
-            EmotionLogEntry(2,"Sad","Stay busy", "2024-02-27 10:00:00"),
-            // ... add more entries
-        )
+
         recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.adapter = EmotionHistoryAdapter(emotionHistory)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        historyViewModel.allHistory.observe(this, Observer {
+            if (!it.isNullOrEmpty()){
+                recyclerView.adapter =  EmotionHistoryAdapter(it)
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
+        })
     }
 
 }

@@ -30,6 +30,7 @@ import husaynhakeem.io.facedetector.FaceBoundsOverlay
 import husaynhakeem.io.facedetector.FaceDetector
 import husaynhakeem.io.facedetector.Frame
 import husaynhakeem.io.facedetector.LensFacing
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
@@ -68,8 +69,10 @@ class MainActivity : AppCompatActivity() {
                     super.onPictureTaken(result)
                     val byteArrayImage = result.data
                     // TODO: use dynamic date time. date time to string
+                    val uid = (0..10).random()
                     val history = History(
-                        dateTime = "2021", //todo : dynamic date
+                        historyId = uid,
+                        dateTime = "2021",
                         userId = 2,
                         expressionType = 3,
                         capturedFace = byteArrayImage,

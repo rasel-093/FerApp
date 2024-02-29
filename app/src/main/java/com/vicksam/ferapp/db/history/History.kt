@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "history")
 data class History(
-    @PrimaryKey(autoGenerate = true) val historyId: Int = 1,
+    @PrimaryKey(autoGenerate = true) val historyId: Int,
     val dateTime: String,
     val userId: Int,
     val expressionType: Int,
