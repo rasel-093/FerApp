@@ -10,7 +10,7 @@ import com.vicksam.ferapp.db.guidance.GuidanceRepository
 import kotlinx.coroutines.launch
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
-    val allHistory: LiveData<List<History>>
+    val allHistory: LiveData<List<FullHistory>>
     private val repository: HistoryRepository
     init {
         val historyDao = AppDatabase.getInstance(application).historyDao()

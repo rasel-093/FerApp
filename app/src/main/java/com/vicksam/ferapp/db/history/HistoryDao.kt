@@ -22,8 +22,8 @@ interface HistoryDao {
     @Query("SELECT * FROM history WHERE userId = :userId")
     suspend fun getHistoryByUserId(userId: Int): List<History>
 
-    @Query("SELECT * FROM history")
-    fun getAllHistory(): LiveData<List<History>>
+    @Query("SELECT historyId , dateTime,userId,expressionType,capturedFace,emotion,guidanceText,isRead FROM history INNER JOIN guidance ON history.guidanceId = guidance.guidanceId")
+    fun getAllHistory(): LiveData<List<FullHistory>>
 
     @Query("SELECT * FROM history WHERE guidanceId = :guidanceId")
     fun getHistoryByGuidanceId(guidanceId: Int): LiveData<List<History>>

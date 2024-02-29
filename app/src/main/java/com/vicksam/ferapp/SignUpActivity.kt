@@ -41,8 +41,14 @@ class SignUpActivity : AppCompatActivity() {
                 username = userName,
                 password = password
             )
-            userViewModel.insertUser(user)
-            Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+            if(name.isNotEmpty() && userName.isNotEmpty() && age>0 && password.isNotEmpty() && gender.isNotEmpty() && (password == confirmPassword)){
+                userViewModel.insertUser(user)
+                Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(this, "Fill the Form properly", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 }

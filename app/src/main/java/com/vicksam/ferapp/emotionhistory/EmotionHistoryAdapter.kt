@@ -1,22 +1,16 @@
 package com.vicksam.ferapp.emotionhistory
 
-import android.graphics.BitmapFactory
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.createBitmap
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.vicksam.ferapp.R
-import com.vicksam.ferapp.db.history.History
-import com.vicksam.ferapp.db.history.HistoryViewModel
-import com.vicksam.ferapp.db.history.HistoryViewModelFactory
+import com.vicksam.ferapp.db.history.FullHistory
 import com.vicksam.ferapp.functions.byteArrayToBitmap
 
-class EmotionHistoryAdapter(private val emotionHistory: List<History>) :
+class EmotionHistoryAdapter(private val emotionHistory: List<FullHistory>) :
     RecyclerView.Adapter<EmotionHistoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,7 +39,7 @@ class EmotionHistoryAdapter(private val emotionHistory: List<History>) :
 //        }
 
         holder.emotionTextView.text = entry.emotion
-        holder.adviceTextView.text = entry.guidanceId.toString()
+        holder.adviceTextView.text = entry.guidanceText
         holder.timeStampTextView.text = entry.dateTime
         holder.capturedImage.setImageBitmap(capturedImageBitmap)
     }
