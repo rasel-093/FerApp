@@ -19,8 +19,8 @@ interface GuidanceDao {
     @Delete
     suspend fun deleteGuidance(guidance: Guidance)
 
-    @Query("SELECT * FROM guidance WHERE guidanceId = :guidanceId")
-    suspend fun getGuidanceById(guidanceId: Int): Guidance?
+    @Query("SELECT * FROM guidance WHERE emotionType = :emotionType")
+    suspend fun getGuidanceByType(emotionType: String): Guidance?
 
     @Query("SELECT * FROM guidance")
     fun getAllGuidance(): LiveData<List<Guidance>>
