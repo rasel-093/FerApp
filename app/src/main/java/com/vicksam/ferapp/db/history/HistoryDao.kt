@@ -29,7 +29,11 @@ interface HistoryDao {
     @Query("SELECT * FROM history WHERE guidanceId = :guidanceId")
     fun getHistoryByGuidanceId(guidanceId: Int): LiveData<List<History>>
 
+
     //Clear history of the current user/specific user
     @Query("DELETE FROM history WHERE userId = :userId")
     suspend fun clearByUserId(userId: Int)
+
+    @Query("SELECT * FROM history WHERE userId = :userId ")
+    fun getHistorybyUserId(userId: Int): LiveData<List<History>>
 }
