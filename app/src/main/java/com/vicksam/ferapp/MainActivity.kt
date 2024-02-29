@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaActionSound
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,17 +19,15 @@ import com.otaliastudios.cameraview.size.SizeSelectors
 import com.vicksam.ferapp.db.history.History
 import com.vicksam.ferapp.db.history.HistoryViewModel
 import com.vicksam.ferapp.db.history.HistoryViewModelFactory
-import com.vicksam.ferapp.db.user.User
-import com.vicksam.ferapp.db.user.UserViewModel
-import com.vicksam.ferapp.db.user.UserViewModelFactory
 import com.vicksam.ferapp.fer.FerModel
 import com.vicksam.ferapp.fer.FerViewModel
+import com.vicksam.ferapp.functions.byteArrayToBitmap
+import com.vicksam.ferapp.functions.getCurrentDateTime
 import husaynhakeem.io.facedetector.FaceBounds
 import husaynhakeem.io.facedetector.FaceBoundsOverlay
 import husaynhakeem.io.facedetector.FaceDetector
 import husaynhakeem.io.facedetector.Frame
 import husaynhakeem.io.facedetector.LensFacing
-import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,8 +40,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val historyViewModel: HistoryViewModel = ViewModelProvider(this, HistoryViewModelFactory(application)).get(
-            HistoryViewModel::class.java)
+        val historyViewModel: HistoryViewModel = ViewModelProvider(this, HistoryViewModelFactory(application))[HistoryViewModel::class.java]
 
         viewfinder = findViewById(R.id.viewfinder)
         faceBoundsOverlay = findViewById(R.id.faceBoundsOverlay)
@@ -52,6 +48,10 @@ class MainActivity : AppCompatActivity() {
         val toggleCameraBtn = findViewById<FloatingActionButton>(R.id.toggleCameraButton)
         val profileBtn = findViewById<FloatingActionButton>(R.id.profileButtonId)
         val captureCameraBtn = findViewById<FloatingActionButton>(R.id.captureButtonId)
+        val lensFacing = savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
+        setupCamera(lensFacing,toggleCameraBtn)
+        FerModel.load(this)
+        setupObservers()
 
         profileBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         captureCameraBtn.setOnClickListener {
-            viewfinder.mode = Mode.PICTURE;
+            viewfinder.mode = Mode.PICTURE
             viewfinder.takePictureSnapshot()
             val mediaActionSound = MediaActionSound()
             mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
@@ -68,27 +68,29 @@ class MainActivity : AppCompatActivity() {
                 override fun onPictureTaken(result: PictureResult) {
                     super.onPictureTaken(result)
                     val byteArrayImage = result.data
-                    // TODO: use dynamic date time. date time to string
+                    val bitmapImage = byteArrayToBitmap(byteArrayImage)
                     val uid = (0..10).random()
-                    val history = History(
-                        historyId = uid,
-                        dateTime = "2021",
-                        userId = 2,
-                        expressionType = 3,
-                        capturedFace = byteArrayImage,
-                        emotion = "Sad",
-                        guidanceId = 3
-                    )
-                    historyViewModel.insertHistory(history = history)
+                    val emotion = bitmapImage?.let { it1 -> FerModel.classify(it1) }
+
+                    val history = emotion?.let { it1 ->
+                        History(
+                            historyId = uid,
+                            dateTime = getCurrentDateTime(),
+                            userId = 2,
+                            expressionType = 3,
+                            capturedFace = byteArrayImage,
+                            emotion = it1,
+                            guidanceId = 3
+                        )
+                    }
+
+                    if (history != null) {
+                        historyViewModel.insertHistory(history = history)
+                    }
                     Toast.makeText(this@MainActivity, "Snapshot Taken", Toast.LENGTH_SHORT).show()
                 }
             })
         }
-
-        val lensFacing = savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
-        setupCamera(lensFacing,toggleCameraBtn)
-        FerModel.load(this)
-        setupObservers()
     }
 
     override fun onStart() {

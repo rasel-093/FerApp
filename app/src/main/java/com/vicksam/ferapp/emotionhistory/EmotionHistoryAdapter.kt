@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.createBitmap
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.vicksam.ferapp.R
 import com.vicksam.ferapp.db.history.History
+import com.vicksam.ferapp.db.history.HistoryViewModel
+import com.vicksam.ferapp.db.history.HistoryViewModelFactory
+import com.vicksam.ferapp.functions.byteArrayToBitmap
 
 class EmotionHistoryAdapter(private val emotionHistory: List<History>) :
     RecyclerView.Adapter<EmotionHistoryAdapter.ViewHolder>() {
@@ -31,13 +35,15 @@ class EmotionHistoryAdapter(private val emotionHistory: List<History>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entry = emotionHistory[position]
         val capturedImageByteArray = entry.capturedFace
-        val capturedImageBitmap = capturedImageByteArray?.let {
-            BitmapFactory.decodeByteArray(
-                capturedImageByteArray,
-                0,
-                it.size
-            )
-        }
+        val capturedImageBitmap = byteArrayToBitmap(capturedImageByteArray)
+//            capturedImageByteArray?.let {
+//            BitmapFactory.decodeByteArray(
+//                capturedImageByteArray,
+//                0,
+//                it.size
+//            )
+//        }
+
         holder.emotionTextView.text = entry.emotion
         holder.adviceTextView.text = entry.guidanceId.toString()
         holder.timeStampTextView.text = entry.dateTime

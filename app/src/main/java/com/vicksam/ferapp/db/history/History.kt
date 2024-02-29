@@ -8,7 +8,7 @@ data class History(
     @PrimaryKey(autoGenerate = true) val historyId: Int,
     val dateTime: String,
     val userId: Int,
-    val expressionType: Int,
+    val expressionType: Int,  //detection id
     val capturedFace: ByteArray?, // Optional field for storing captured face image data (BLOB)
     val emotion: String,
     val guidanceId:Int,
