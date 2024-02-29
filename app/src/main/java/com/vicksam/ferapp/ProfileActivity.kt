@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.vicksam.ferapp.db.guidance.GuidanceViewModel
+import com.vicksam.ferapp.db.guidance.GuidanceViewModelFactory
 import com.vicksam.ferapp.db.history.HistoryViewModel
 import com.vicksam.ferapp.db.history.HistoryViewModelFactory
 import com.vicksam.ferapp.emotionhistory.EmotionHistoryAdapter

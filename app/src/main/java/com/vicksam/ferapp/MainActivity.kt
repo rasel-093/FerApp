@@ -16,6 +16,9 @@ import com.otaliastudios.cameraview.controls.Audio
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Mode
 import com.otaliastudios.cameraview.size.SizeSelectors
+import com.vicksam.ferapp.db.guidance.Guidance
+import com.vicksam.ferapp.db.guidance.GuidanceViewModel
+import com.vicksam.ferapp.db.guidance.GuidanceViewModelFactory
 import com.vicksam.ferapp.db.history.History
 import com.vicksam.ferapp.db.history.HistoryViewModel
 import com.vicksam.ferapp.db.history.HistoryViewModelFactory
@@ -41,6 +44,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val historyViewModel: HistoryViewModel = ViewModelProvider(this, HistoryViewModelFactory(application))[HistoryViewModel::class.java]
+        val guidanceViewModel: GuidanceViewModel = ViewModelProvider(this,
+            GuidanceViewModelFactory(application))[GuidanceViewModel::class.java]
+        if(guidanceViewModel.allGuidance.value.isNullOrEmpty()){
+            guidanceViewModel.insertGuidance(Guidance( guidanceText = "Enjoy the moment!", emotionType = "happy"))
+            guidanceViewModel.insertGuidance(Guidance( guidanceText = "Take a deep breath and count to ten before reacting.", emotionType = "anger"))
+            guidanceViewModel.insertGuidance(Guidance( guidanceText = "Observe the situation objectively.", emotionType = "neutral"))
+            guidanceViewModel.insertGuidance(Guidance( guidanceText = "Take a moment to process what just happened.", emotionType = "surprised"))
+
+        }
 
         viewfinder = findViewById(R.id.viewfinder)
         faceBoundsOverlay = findViewById(R.id.faceBoundsOverlay)
@@ -73,6 +85,19 @@ class MainActivity : AppCompatActivity() {
                     val emotion = bitmapImage?.let { it1 -> FerModel.classify(it1) }
 
                     val history = emotion?.let { it1 ->
+                        var guidanceId:Int = 0
+                        if(it1 == "happy"){
+                            guidanceId = 1
+                        }
+                        else if(it1 == "anger"){
+                            guidanceId = 2
+                        }
+                        else if(it1 == "neutral"){
+                            guidanceId = 3
+                        }
+                        else if(it1 == "surprised"){
+                            guidanceId = 4
+                        }
                         History(
                             historyId = uid,
                             dateTime = getCurrentDateTime(),
@@ -80,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                             expressionType = 3,
                             capturedFace = byteArrayImage,
                             emotion = it1,
-                            guidanceId = 3
+                            guidanceId =guidanceId
                         )
                     }
 
