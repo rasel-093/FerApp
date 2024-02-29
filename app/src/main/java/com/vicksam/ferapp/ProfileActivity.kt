@@ -21,8 +21,8 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         val historyViewModel: HistoryViewModel =
             ViewModelProvider(this, HistoryViewModelFactory(application)).get(HistoryViewModel::class.java)
-        //val userId = intent.getIntExtra("userId", -1)
-        val clearAllBtn: Button = findViewById(R.id.clear_all_ButtonId)
+        val userId = intent.getIntExtra("userId", -1)
+        //val clearAllBtn: Button = findViewById(R.id.clear_all_ButtonId)
 
 //        clearAllBtn.setOnClickListener{
 //            historyViewModel.clearByUserId(userId)
@@ -30,12 +30,13 @@ class ProfileActivity : AppCompatActivity() {
 
 
         recyclerView = findViewById(R.id.recycler_view)
-        historyViewModel.allHistory.observe(this, Observer {
-            if (!it.isNullOrEmpty()){
-                recyclerView.adapter =  EmotionHistoryAdapter(it)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-            }
-        })
+       historyViewModel.getHistorybyUserId(userId = userId){
+            it.observe(this, Observer {
+                if (!it.isNullOrEmpty()){
+                    recyclerView.adapter =  EmotionHistoryAdapter(it)
+                    recyclerView.layoutManager = LinearLayoutManager(this)
+                }
+            })
+        }
     }
-
 }

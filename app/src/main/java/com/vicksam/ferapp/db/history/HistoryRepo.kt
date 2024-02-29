@@ -10,4 +10,8 @@ class HistoryRepository(private val historyDao: HistoryDao) {
     suspend fun clearByUserId(userId: Int){
         historyDao.clearByUserId(userId)
     }
+
+    suspend fun getHistorybyUserId(userId: Int): LiveData<List<FullHistory>> {
+        return historyDao.getHistorybyUserId(userId)
+    }
 }

@@ -28,4 +28,11 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             repository.clearByUserId(userId)
         }
     }
+
+    fun getHistorybyUserId(userId: Int, onComplete: (LiveData<List<FullHistory>>)->Unit){
+        viewModelScope.launch{
+            val history = repository.getHistorybyUserId(userId)
+            onComplete(history)
+        }
+    }
 }
