@@ -25,23 +25,28 @@ class LoginActivity : AppCompatActivity() {
         val passwordEt = findViewById<EditText>(R.id.password_lg)
         val goToSignUp = findViewById<TextView>(R.id.go_to_signup_tv)
         val loginBtn = findViewById<Button>(R.id.login_button_id)
+
         loginBtn.setOnClickListener(View.OnClickListener {
             val userName = userNameEt.text.toString()
             val password  = passwordEt.text.toString()
             var userPassword:String=""
-            if(userName.isNotEmpty()&&password.isNotEmpty()){
-                userViewModel.viewModelScope.launch {
-                    userViewModel.getUser(userName)
-                    userPassword = userViewModel.user.password
-                }
-                if(password == userPassword){
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                }
-                else{
-                    Toast.makeText(this, "Wrong Credential", Toast.LENGTH_SHORT).show()
-                }
 
+            if(userName.isNotEmpty()&&password.isNotEmpty()){
+                userViewModel.getUser(userName){
+                    if (it != null){
+                        if (it.password == password){
+                            val intent = Intent(this, MainActivity::class.java)
+                            Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                            startActivity(intent)
+                        }
+                        else{
+                            Toast.makeText(this, "Wrong Credential", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    else{
+                        Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             else{
                 Toast.makeText(this, "Fill the Form properly", Toast.LENGTH_SHORT).show()
