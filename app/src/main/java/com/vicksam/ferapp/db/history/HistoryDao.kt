@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.vicksam.ferapp.db.user.User
 
 @Dao
 interface HistoryDao {
@@ -27,4 +28,8 @@ interface HistoryDao {
 
     @Query("SELECT * FROM history WHERE guidanceId = :guidanceId")
     fun getHistoryByGuidanceId(guidanceId: Int): LiveData<List<History>>
+
+    //Clear history of the current user/specific user
+    @Query("DELETE FROM history WHERE userId = :userId")
+    suspend fun clearByUserId(userId: Int)
 }

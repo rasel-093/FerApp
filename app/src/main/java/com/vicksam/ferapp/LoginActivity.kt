@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
                     if (it != null){
                         if (it.password == password){
                             val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("userId",it.userid)  //Passing user id to MainActivity
                             Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                             startActivity(intent)
                         }

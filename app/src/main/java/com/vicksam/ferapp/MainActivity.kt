@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val historyViewModel: HistoryViewModel = ViewModelProvider(this, HistoryViewModelFactory(application))[HistoryViewModel::class.java]
+        val userId = intent.getIntExtra("userId", -1)
+
 
         viewfinder = findViewById(R.id.viewfinder)
         faceBoundsOverlay = findViewById(R.id.faceBoundsOverlay)
@@ -49,12 +51,14 @@ class MainActivity : AppCompatActivity() {
         val profileBtn = findViewById<FloatingActionButton>(R.id.profileButtonId)
         val captureCameraBtn = findViewById<FloatingActionButton>(R.id.captureButtonId)
         val lensFacing = savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
+
         setupCamera(lensFacing,toggleCameraBtn)
         FerModel.load(this)
         setupObservers()
 
         profileBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("userId", userId) //passing user id to ProfileActivity
             startActivity(intent)
         }
 

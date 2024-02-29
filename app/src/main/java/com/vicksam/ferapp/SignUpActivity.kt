@@ -44,11 +44,18 @@ class SignUpActivity : AppCompatActivity() {
             if(name.isNotEmpty() && userName.isNotEmpty() && age>0 && password.isNotEmpty() && gender.isNotEmpty() && (password == confirmPassword)){
                 userViewModel.insertUser(user)
                 Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+
+                //Clearing textfield after successful registration
+                nameEt.text = null
+                userNameEt.text = null
+                ageEt.text = null
+                passwordEt.text = null
+                confirmPasswordEt.text = null
+                genderEt.text = null
             }
             else{
                 Toast.makeText(this, "Fill the Form properly", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }

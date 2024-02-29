@@ -23,4 +23,9 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             repository.insertHistory(history)
         }
     }
+    fun clearByUserId(userId: Int){
+        viewModelScope.launch {
+            repository.clearByUserId(userId)
+        }
+    }
 }

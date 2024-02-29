@@ -9,9 +9,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FerApp">
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".LoginActivity"
             android:exported="true" >
             <intent-filter>
