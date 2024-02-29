@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vicksam.ferapp.db.guidance.GuidanceViewModel
 import com.vicksam.ferapp.db.guidance.GuidanceViewModelFactory
 import com.vicksam.ferapp.db.history.HistoryViewModel
@@ -22,11 +23,11 @@ class ProfileActivity : AppCompatActivity() {
         val historyViewModel: HistoryViewModel =
             ViewModelProvider(this, HistoryViewModelFactory(application)).get(HistoryViewModel::class.java)
         val userId = intent.getIntExtra("userId", -1)
-        //val clearAllBtn: Button = findViewById(R.id.clear_all_ButtonId)
+        val clearAllBtn: FloatingActionButton = findViewById(R.id.clear_all_ButtonId)
 
-//        clearAllBtn.setOnClickListener{
-//            historyViewModel.clearByUserId(userId)
-//        }
+        clearAllBtn.setOnClickListener{
+            historyViewModel.clearByUserId(userId)
+        }
 
 
         recyclerView = findViewById(R.id.recycler_view)
