@@ -51,11 +51,11 @@ class FaceDetector(private val faceBoundsOverlay: FaceBoundsOverlay) {
 
     init {
         faceBoundsOverlay.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(view: View?) {
+            override fun onViewAttachedToWindow(v: View) {
                 faceDetectionExecutor = Executors.newSingleThreadExecutor()
             }
 
-            override fun onViewDetachedFromWindow(view: View?) {
+            override fun onViewDetachedFromWindow(v: View) {
                 if (::faceDetectionExecutor.isInitialized) {
                     faceDetectionExecutor.shutdown()
                 }

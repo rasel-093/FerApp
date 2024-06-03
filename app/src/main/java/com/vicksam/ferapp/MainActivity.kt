@@ -2,46 +2,70 @@ package com.vicksam.ferapp
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.MediaActionSound
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
-import android.view.View
-import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.otaliastudios.cameraview.CameraListener
+import com.otaliastudios.cameraview.CameraView
+import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.controls.Audio
 import com.otaliastudios.cameraview.controls.Facing
+import com.otaliastudios.cameraview.controls.Mode
 import com.otaliastudios.cameraview.size.SizeSelectors
 import com.vicksam.ferapp.fer.FerModel
 import com.vicksam.ferapp.fer.FerViewModel
 import husaynhakeem.io.facedetector.FaceBounds
+import husaynhakeem.io.facedetector.FaceBoundsOverlay
 import husaynhakeem.io.facedetector.FaceDetector
 import husaynhakeem.io.facedetector.Frame
 import husaynhakeem.io.facedetector.LensFacing
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel = ViewModelProvider
-        .NewInstanceFactory()
-        .create(FerViewModel::class.java)
+    private lateinit var viewfinder: CameraView // Assuming CameraView is the type of your viewfinder
+    private lateinit var faceBoundsOverlay:FaceBoundsOverlay
+    private val viewModel = FerViewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val profileBtn = findViewById<Button>(R.id.profileButtonId)
-        profileButtonId.setOnClickListener(View.OnClickListener {
+        viewfinder = findViewById(R.id.viewfinder)
+        faceBoundsOverlay = findViewById(R.id.faceBoundsOverlay)
+
+        val toggleCameraBtn = findViewById<FloatingActionButton>(R.id.toggleCameraButton)
+        val profileBtn = findViewById<FloatingActionButton>(R.id.profileButtonId)
+        val captureCameraBtn = findViewById<FloatingActionButton>(R.id.captureButtonId)
+
+        profileBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
-        })
+        }
 
-        val lensFacing =
-                savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
-        setupCamera(lensFacing)
+        captureCameraBtn.setOnClickListener {
+            viewfinder.mode = Mode.PICTURE;
+            viewfinder.takePictureSnapshot()
+            val mediaActionSound = MediaActionSound()
+            mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
 
-        // Load model
+            viewfinder.addCameraListener(object : CameraListener(){
+                override fun onPictureTaken(result: PictureResult) {
+                    super.onPictureTaken(result)
+                    val byteArrayImage = result.data
+
+                    Toast.makeText(this@MainActivity, "Snapshot Taken", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        val lensFacing = savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
+        setupCamera(lensFacing,toggleCameraBtn)
         FerModel.load(this)
-
         setupObservers()
     }
 
@@ -71,32 +95,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupCamera(lensFacing: Facing) {
+
+    private fun setupCamera(
+        lensFacing: Facing,
+        toggleCameraButton: FloatingActionButton
+    ) {
         val faceDetector = FaceDetector(faceBoundsOverlay).also { it.setup() }
 
-            viewfinder.facing = lensFacing
-            // Lower the frame resolution for better computation performance when working with face images
-            viewfinder.setPreviewStreamSize(SizeSelectors.maxWidth(MAX_PREVIEW_WIDTH))
-            viewfinder.audio = Audio.OFF
+        viewfinder.facing = lensFacing
+        viewfinder.setPreviewStreamSize(SizeSelectors.maxWidth(MAX_PREVIEW_WIDTH))
+        viewfinder.audio = Audio.OFF
 
-            viewfinder.addFrameProcessor {
-                faceDetector.process(
-                        Frame(
-                                data = it.data,
-                                rotation = it.rotation,
-                                size = Size(it.size.width, it.size.height),
-                                format = it.format,
-                                lensFacing = if (viewfinder.facing == Facing.BACK) LensFacing.BACK else LensFacing.FRONT
-                        )
+        viewfinder.addFrameProcessor {
+            faceDetector.process(
+                Frame(
+                    data = it.data,
+                    rotation = it.rotation,
+                    size = Size(it.size.width, it.size.height),
+                    format = it.format,
+                    lensFacing = if (viewfinder.facing == Facing.BACK) LensFacing.BACK else LensFacing.FRONT
                 )
-            }
-
-            toggleCameraButton.setOnClickListener {
-                viewfinder.toggleFacing()
-            }
+            )
         }
 
-    private fun FaceDetector.setup() = run {
+        toggleCameraButton.setOnClickListener {
+            viewfinder.toggleFacing()
+        }
+    }
+
+    private fun FaceDetector.setup() {
         setOnFaceDetectionListener(object : FaceDetector.OnFaceDetectionResultListener {
             override fun onSuccess(faceBounds: List<FaceBounds>, faceBitmaps: List<Bitmap>) {
                 viewModel.onFacesDetected(faceBounds, faceBitmaps)
